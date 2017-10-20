@@ -1,8 +1,14 @@
 package com.tild.desafio.posts;
 
 import com.tild.desafio.blog.data.PostRepository;
+import com.tild.desafio.blog.data.TagRepository;
 import com.tild.desafio.blog.data.UserRepository;
 import com.tild.desafio.blog.model.Post;
+import com.tild.desafio.blog.model.Tag;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +22,13 @@ public class PostsController {
 
     private PostRepository postRepository;
     private UserRepository userRepository;
+    private TagRepository tagRepository;
 
     @Autowired
-    public PostsController(PostRepository postRepository, UserRepository userRepository) {
+    public PostsController(PostRepository postRepository, UserRepository userRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.tagRepository = tagRepository;
     }
 
     @GetMapping("/new")
@@ -35,8 +43,23 @@ public class PostsController {
 
     @PostMapping
     public ModelAndView createPost(Post post) {
-        if(post.isValid())
-            postRepository.save(post);
+    	
+        if(post.isValid()) {
+        	if (post.getTags() != null) {
+        		post.setTags(
+	        		post.getTags().stream().map(t -> {
+	        			List<Tag> tag = tagRepository.findByTagIgnoreCase(t.getTag());
+	        			if(tag != null && !tag.isEmpty()) {
+	        				return tag.get(0);
+	        			}else {
+	        				return t;
+	        			}
+	        		}).collect(Collectors.toList())
+        		);
+        	}
+        		
+        	postRepository.save(post);
+        }
 
         return new ModelAndView("redirect:/");
     }
