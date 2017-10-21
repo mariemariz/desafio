@@ -27,7 +27,7 @@ public class Post {
 	@JsonIgnoreProperties("posts")
 	private User user;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "post_tag", 
 		joinColumns = @JoinColumn(name = "post_id"), 
 		inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -78,7 +78,7 @@ public class Post {
 	}
 
 	public String getTagsString() {
-		if (tags != null) {
+		if (this.getTags() != null) {
 			return tags.stream().map(Tag::getTag).collect(Collectors.joining(", "));
 		} else {
 			return "";
