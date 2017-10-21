@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	@Query("SELECT p FROM Post p JOIN p.tags t WHERE t.tag = :tag")
 	List<Post> findByTag(@Param("tag") String tag);
 	
+	List<Post> findByTextContainingIgnoreCaseOrTitleContainingIgnoreCase(String text, String title);
+	
 }

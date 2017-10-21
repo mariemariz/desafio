@@ -6,6 +6,8 @@ import com.tild.desafio.blog.data.UserRepository;
 import com.tild.desafio.blog.model.Post;
 import com.tild.desafio.blog.model.Tag;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -38,6 +41,27 @@ public class PostsController {
         mv.addObject("users", userRepository.findAll());
         mv.addObject("newPost", new Post());
 
+        return mv;
+    }
+    
+    @GetMapping("/search")
+    public ModelAndView searchPost(@RequestParam String query){
+    	ModelAndView mv = new ModelAndView("index");
+    	query = query.trim();
+    	
+    	
+    	List<Post> list = new ArrayList<Post>();
+    	
+        if (query != null) {
+        	list.addAll(postRepository
+        			.findByTextContainingIgnoreCaseOrTitleContainingIgnoreCase(query, query));
+        	for (String t : query.split(" ")) {
+        		list.addAll(postRepository.findByTextContainingIgnoreCaseOrTitleContainingIgnoreCase(t, t)
+        			.stream().filter(post -> !list.contains(post)).collect(Collectors.toList()));
+        	}
+        }        
+        
+        mv.addObject("posts", list);
         return mv;
     }
 

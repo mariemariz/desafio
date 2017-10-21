@@ -33,6 +33,12 @@
 </head>
 <body>
 <div th:fragment="sidebar" class="sidebar pure-u-1 pure-u-md-1-4">
+
+	<form class="pure-form form-search" action="/posts/search">
+    	<input id="query" name="query" type="text" class="pure-input-rounded" placeholder="Search" />
+    	<button type="submit" class="pure-button">Search</button>
+    </form>
+
     <div class="header">
         <h1 class="brand-title">
             A Sample Blog
@@ -45,13 +51,14 @@
                     <a class="pure-button" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="pure-button" href="#">New User</a>
+                    <a class="pure-button" href="/users/new">New User</a>
                 </li>
                 <li class="nav-item">
                     <a class="pure-button" href="/posts/new">New Post</a>
                 </li>
             </ul>
         </nav>
+        
     </div>
 </div>
 </body>

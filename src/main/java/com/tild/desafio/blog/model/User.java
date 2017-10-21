@@ -1,8 +1,11 @@
 package com.tild.desafio.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Preconditions;
 
 import javax.persistence.*;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,6 +62,25 @@ public class User {
 
     public String getTwitterUrl() {
         return String.format("https://twitter.com/%s", this.getTwitter());
+    }
+    
+    public boolean isValid() {
+    	boolean valid = false;
+
+		try {
+			Arrays.asList(this.getName(), this.getTwitter())
+					.forEach(Preconditions::checkNotNull);
+
+			Arrays.asList(this.getName(), this.getTwitter()).forEach(txt -> {
+				Preconditions.checkArgument(!txt.isEmpty());
+			});
+
+			valid = true;
+		} catch (Exception e) {
+			valid = false;
+		}
+
+		return valid;
     }
 
     @Override

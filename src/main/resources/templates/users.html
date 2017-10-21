@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="new" class="content pure-u-1 pure-u-md-3-4">
+    <div>
+        <div class="posts">
+            <h1 class="content-subhead">New User</h1>
+
+            <form class="pure-form pure-form-aligned" method="post" action="/users" th:object="${newUser}">
+                <fieldset>
+                    <div class="pure-control-group">
+                        <label for="name">Name</label>
+                        <input id="name" class="pure-input-3-4" type="text" placeholder="Name" th:field="*{name}"/>
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label for="twitterInput">https://twitter.com/</label>
+	                    <input id="twitterInput" type="text" placeholder="Twitter" class="pure-input-3-4" th:field="*{twitter}"/>
+                    </div>
+
+                    <div class="pure-controls">
+                        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
